@@ -7,6 +7,7 @@ pipeline {
 
     environment {
         IMAGE_NAME = 'ahmeddeb123/jenkins-projet:latest'
+        REMOTE_SERVER = 'ahmed@192.168.162.129'
     }
 
     stages {
@@ -49,6 +50,22 @@ pipeline {
                     docker.withRegistry('', 'docker-hub') {
                         def appImage = docker.build("${env.IMAGE_NAME}")
                         appImage.push()
+                    }
+                }
+            }
+        }
+        stage('Deploy to Remote Server') {
+            steps {
+                script {
+                    sshagent(['ssh-key']) {
+                        sh """
+                        ssh -o StrictHostKeyChecking=no ${env.REMOTE_SERVER} << EOF
+                        docker pull ${env.IMAGE_NAME}:${env.IMAGE_TAG}
+                        docker stop app || true
+                        docker rm app || true
+                        docker run -d --name app -p 8080:8080 ${env.IMAGE_NAME}:${env.IMAGE_TAG}
+                        EOF
+                        """
                     }
                 }
             }
