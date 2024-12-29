@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        DOCKER_HUB_ID = "azer"
+        IMAGE_NAME = 'ahmeddeb123/jenkins-projet:latest'
     }
 
     stages {
@@ -41,6 +41,16 @@ pipeline {
             steps {
                 // Emballer le projet (générer le fichier jar/war)
                 sh 'mvn package'
+            }
+        }
+        stage('Build and Push Docker Image') {
+            steps {
+                script {
+                    docker.withRegistry('', 'docker-hub') {
+                        def appImage = docker.build("${env.IMAGE_NAME}")
+                        appImage.push()
+                    }
+                }
             }
         }
     }
