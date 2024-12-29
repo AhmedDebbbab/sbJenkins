@@ -7,7 +7,7 @@ pipeline {
 
     environment {
         IMAGE_NAME = 'ahmeddeb123/jenkins-projet:latest'
-        REMOTE_SERVER = 'ahmed@192.168.162.129'
+        REMOTE_SERVER = '192.168.162.129'
     }
 
     stages {
