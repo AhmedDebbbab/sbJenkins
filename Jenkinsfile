@@ -6,6 +6,7 @@ pipeline {
     }
 
     environment {
+        DOCKER_HUB_ID = "azer"
     }
 
     stages {
