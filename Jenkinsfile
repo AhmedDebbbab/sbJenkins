@@ -60,10 +60,10 @@ pipeline {
                     sshagent(['ssh-key']) {
                         sh """
                         ssh -o StrictHostKeyChecking=no ${env.REMOTE_SERVER} << EOF
-                        docker pull ${env.IMAGE_NAME}:${env.IMAGE_TAG}
+                        docker pull ${env.IMAGE_NAME}
                         docker stop app || true
                         docker rm app || true
-                        docker run -d --name app -p 8080:8080 ${env.IMAGE_NAME}:${env.IMAGE_TAG}
+                        docker run -d --name app -p 8080:8080 ${env.IMAGE_NAME}
                         EOF
                         """
                     }
